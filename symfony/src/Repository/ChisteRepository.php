@@ -21,22 +21,21 @@ class ChisteRepository extends ServiceEntityRepository
         parent::__construct($registry, Chiste::class);
     }
 
-    public function save(Chiste $entity, bool $flush = false): void
+    public function create(Chiste $entity): void
     {
         $this->getEntityManager()->persist($entity);
-
-        if ($flush) {
-            $this->getEntityManager()->flush();
-        }
+        $this->getEntityManager()->flush();
     }
 
-    public function remove(Chiste $entity, bool $flush = false): void
+    public function update(Chiste $entity): void
+    {
+        $this->getEntityManager()->flush();
+    }
+
+    public function delete(Chiste $entity): void
     {
         $this->getEntityManager()->remove($entity);
-
-        if ($flush) {
-            $this->getEntityManager()->flush();
-        }
+        $this->getEntityManager()->flush();
     }
 
 //    /**
