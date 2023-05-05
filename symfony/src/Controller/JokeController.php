@@ -7,8 +7,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
-use App\Repository\jokeRepository;
-use App\Entity\joke;
+use App\Repository\JokeRepository;
+use App\Entity\Joke;
 
 
 /**
@@ -23,7 +23,7 @@ class JokeController extends AbstractController
   private $apis;
   private $apiHeaders;
 
-  public function __construct(private HttpClientInterface $client, private jokeRepository $jokeRepository ){
+  public function __construct(private HttpClientInterface $client, private JokeRepository $jokeRepository ){
     $this->apis = [
       'Chuck' => 'https://api.chucknorris.io/jokes/random',
       'Dad' => 'https://icanhazdadjoke.com/',
@@ -39,8 +39,8 @@ class JokeController extends AbstractController
   #[Route('/joke/{apiName}', name: 'app_joke_get', methods: ['GET'])]
   public function index(string $apiName = null): JsonResponse
   {
-    $randName = array_rand($this->apis,1);
-    $apiName = $apiName ? $apiName : $randName;
+    $randIndex = array_rand($this->apis,1);
+    $apiName = $apiName ? $apiName : $randIndex;
 
     $apiUrl = $this->apis[$apiName]  ?? null;
 
@@ -53,15 +53,10 @@ class JokeController extends AbstractController
 
       $responseArray = $response->toArray();
       $joke = $responseArray['value'] ?? $responseArray['joke'];
-      return $this->json([
-        'status' => $response->getStatusCode(),
-        'joke' => $joke,
-      ]);
+      return $this->json($joke);
     }
     
-    return $this->json([
-      'error' => 'No Joke Found',
-    ]);
+    return $this->json('No Joke Found');
   }
 
   #[Route('/joke', name: 'app_joke_new', methods: ['POST'])]
@@ -71,13 +66,14 @@ class JokeController extends AbstractController
 
     if(!$jokeText) return $this->json('Not Joke Text');
 
-    $newJoke = new joke();
-    $newJoke->setJoke($jokeText);
+    $newJoke = new Joke();
+    $newJoke->setJokeText($jokeText);
     $this->jokeRepository->create($newJoke);
-    return $this->json('Joke created');
+    var_dump($newJoke->getId());
+    return $this->json($newJoke->toJson());
   }
 
-  #[Route('/joke/{id}', name: 'app_joke_update', methods: ['PUT'])]
+  #[Route('/joke', name: 'app_joke_update', methods: ['PUT'])]
   public function update(Request $request): JsonResponse
   {
     $id = $request->request->get('number');
@@ -90,15 +86,15 @@ class JokeController extends AbstractController
 
     $joke = $this->jokeRepository->find($id);
     if($joke){
-      $joke->setJoke($jokeText);
+      $joke->setJokeText($jokeText);
       $this->jokeRepository->update($joke);
-      return $this->json('Updated');
+      return $this->json($joke->toJson());
     }
 
     return $this->json('Not Found');
   }
 
-  #[Route('/joke/{id}', name: 'app_joke_delete', methods: ['DELETE'])]
+  #[Route('/joke', name: 'app_joke_delete', methods: ['DELETE'])]
   public function delete(int $id): JsonResponse
   {
     $id = $request->request->get('number');
@@ -108,7 +104,7 @@ class JokeController extends AbstractController
     $joke = $this->jokeRepository->find($id);
     if($joke){
       $this->jokeRepository->delete($joke);
-      return $this->json('Deleted');
+      return $this->json('Joke Removed');
     }
 
     return $this->json('Not Found');

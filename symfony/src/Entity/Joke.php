@@ -32,4 +32,12 @@ class Joke
 
         return $this;
     }
+
+    public function toJson(){
+        return [
+            'id' => $this->getId(),
+            'jokeText' => $this->getJokeText()
+        ];
+    }
+
 }
