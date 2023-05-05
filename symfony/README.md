@@ -8,6 +8,6 @@ composer require --dev symfony/maker-bundle
 
 ### SQL
 
-- 'CREATE TABLE chiste (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, joke VARCHAR(255) NOT NULL)'
+- 'CREATE TABLE joke (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, jokeText VARCHAR(255) NOT NULL)'
 
 ### NoSQL

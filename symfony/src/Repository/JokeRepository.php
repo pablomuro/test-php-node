@@ -2,44 +2,44 @@
 
 namespace App\Repository;
 
-use App\Entity\Chiste;
+use App\Entity\Joke;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Chiste>
+ * @extends ServiceEntityRepository<Joke>
  *
- * @method Chiste|null find($id, $lockMode = null, $lockVersion = null)
- * @method Chiste|null findOneBy(array $criteria, array $orderBy = null)
- * @method Chiste[]    findAll()
- * @method Chiste[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Joke|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Joke|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Joke[]    findAll()
+ * @method Joke[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ChisteRepository extends ServiceEntityRepository
+class JokeRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Chiste::class);
+        parent::__construct($registry, Joke::class);
     }
 
-    public function create(Chiste $entity): void
+    public function create(Joke $entity): void
     {
         $this->getEntityManager()->persist($entity);
         $this->getEntityManager()->flush();
     }
 
-    public function update(Chiste $entity): void
+    public function update(Joke $entity): void
     {
         $this->getEntityManager()->flush();
     }
 
-    public function delete(Chiste $entity): void
+    public function delete(Joke $entity): void
     {
         $this->getEntityManager()->remove($entity);
         $this->getEntityManager()->flush();
     }
 
 //    /**
-//     * @return Chiste[] Returns an array of Chiste objects
+//     * @return Joke[] Returns an array of Joke objects
 //     */
 //    public function findByExampleField($value): array
 //    {
@@ -53,7 +53,7 @@ class ChisteRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?Chiste
+//    public function findOneBySomeField($value): ?Joke
 //    {
 //        return $this->createQueryBuilder('c')
 //            ->andWhere('c.exampleField = :val')

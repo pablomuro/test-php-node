@@ -6,7 +6,7 @@ import {
   NOT_FOUND_MSG,
   NO_JOKE_FOUND,
 } from "../helpers/constants";
-import axios, { AxiosRequestConfig } from "axios";
+import axios from "axios";
 
 const API_ENDPOINTS = {
   Chuck: "https://api.chucknorris.io/jokes/random",
@@ -21,9 +21,9 @@ const REQUEST_HEADERS = {
 export class JokeController {
   async index(request: Request) {
     let apiName: string | undefined = request.params.apiName;
-    const randNumber: number = Math.round(Math.random());
+    const randIndex: number = Math.round(Math.random());
 
-    apiName = apiName ? apiName : Object.keys(API_ENDPOINTS)[randNumber];
+    apiName = apiName ? apiName : Object.keys(API_ENDPOINTS)[randIndex];
 
     const apiUrl = API_ENDPOINTS[apiName];
 

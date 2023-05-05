@@ -2,11 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\ChisteRepository;
+use App\Repository\JokeRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: ChisteRepository::class)]
-class Chiste
+#[ORM\Entity(repositoryClass: JokeRepository::class)]
+class Joke
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -14,21 +14,21 @@ class Chiste
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $joke = null;
+    private ?string $jokeText = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getJoke(): ?string
+    public function getJokeText(): ?string
     {
-        return $this->joke;
+        return $this->jokeText;
     }
 
-    public function setJoke(string $joke): self
+    public function setJokeText(string $jokeText): self
     {
-        $this->joke = $joke;
+        $this->jokeText = $jokeText;
 
         return $this;
     }
