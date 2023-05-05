@@ -1,4 +1,4 @@
-stuff.txt
+stuff*.txt
 .vscode*
 
 ###> symfony/framework-bundle ###
