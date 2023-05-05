@@ -1,5 +1,10 @@
 import { Request } from "express";
 import { arrayLcm } from "../helpers/math";
+import {
+  INVALID_QUERY_PARAM_LIST_MSG,
+  INVALID_QUERY_PARAM_NUMBER_MSG,
+  NO_QUERY_PARAMS_MSG,
+} from "../helpers/constants";
 
 export class MathController {
   async index(request: Request) {
@@ -9,7 +14,7 @@ export class MathController {
       if (Number.isInteger(Number(number))) {
         return Number(number) + 1;
       } else {
-        return "Invalid query parameter number: Not a number";
+        return INVALID_QUERY_PARAM_NUMBER_MSG;
       }
     }
 
@@ -19,13 +24,13 @@ export class MathController {
         if (numbersArray && Array.isArray(numbersArray)) {
           return arrayLcm(numbersArray);
         } else {
-          throw "error";
+          throw null;
         }
       } catch (error) {
-        return "Invalid query parameter numbers: Not a list";
+        return INVALID_QUERY_PARAM_LIST_MSG;
       }
     }
 
-    return "No query parameter passed";
+    return NO_QUERY_PARAMS_MSG;
   }
 }

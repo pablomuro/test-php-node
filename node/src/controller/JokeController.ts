@@ -4,7 +4,7 @@ import { validateId, validateJokeText } from "../helpers/validators";
 import {
   JOKE_REMOVED_MSG,
   NOT_FOUND_MSG,
-  NO_JOKE_FOUND,
+  NO_JOKE_FOUND_MSG,
 } from "../helpers/constants";
 import axios from "axios";
 
@@ -27,19 +27,19 @@ export class JokeController {
 
     const apiUrl = API_ENDPOINTS[apiName];
 
-    if (!apiUrl) throw Error(NO_JOKE_FOUND);
+    if (!apiUrl) throw Error(NO_JOKE_FOUND_MSG);
 
     const { data, status } = await axios.get(apiUrl, {
       headers: REQUEST_HEADERS,
     });
 
-    if (status !== 200) throw Error(NO_JOKE_FOUND);
+    if (status !== 200) throw Error(NO_JOKE_FOUND_MSG);
 
     const { value = null, joke = null } = data;
 
     const response = value ? value : joke;
 
-    if (!response) throw Error(NO_JOKE_FOUND);
+    if (!response) throw Error(NO_JOKE_FOUND_MSG);
 
     return response;
   }
