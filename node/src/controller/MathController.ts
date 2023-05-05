@@ -1,5 +1,5 @@
 import { Request } from "express";
-import { arrayLcm } from "../helpers";
+import { arrayLcm } from "../helpers/math";
 
 export class MathController {
   async index(request: Request) {

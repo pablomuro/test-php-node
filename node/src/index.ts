@@ -7,7 +7,6 @@ import { Joke } from "./entity/Joke";
 
 AppDataSource.initialize()
   .then(async () => {
-    // create express app
     const app = express();
     app.use(bodyParser.json());
     app.use(express.urlencoded({ extended: true, limit: "1mb" }));
