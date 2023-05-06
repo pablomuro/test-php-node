@@ -27,6 +27,9 @@ class MathController extends AbstractController
 
         $result = $numberList[0];
         for ($i = 1; $i < sizeof($numberList); $i++){
+
+          if(!is_numeric($numberList[$i])) return $this->json('Invalid query parameter numbers: Not a list of numbers');
+
           $result = ((($numberList[$i] * $result)) /
                   (gmp_intval(gmp_gcd($numberList[$i], $result))));
         }

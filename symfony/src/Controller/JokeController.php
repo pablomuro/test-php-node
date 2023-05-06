@@ -15,7 +15,6 @@ use App\Entity\Joke;
  * Pegar dados do corpo, sanetizar dados
  * Validar dados do path e ID, string e numero via validator do Symfony
  * yaml para OpenApi: fazer no node
- * Unit test
  */
 class JokeController extends AbstractController
 {
@@ -77,11 +76,9 @@ class JokeController extends AbstractController
   public function update(Request $request): JsonResponse
   {
     $id = $request->request->get('number');
-
-    if(!$id) return $this->json('Not Found');
-
     $jokeText = $request->request->get('joke');
 
+    if(!$id) return $this->json('Not Found');
     if(!$jokeText) return $this->json('Not Joke Text');
 
     $joke = $this->jokeRepository->find($id);
@@ -95,7 +92,7 @@ class JokeController extends AbstractController
   }
 
   #[Route('/joke', name: 'app_joke_delete', methods: ['DELETE'])]
-  public function delete(int $id): JsonResponse
+  public function delete(Request $request): JsonResponse
   {
     $id = $request->request->get('number');
 
