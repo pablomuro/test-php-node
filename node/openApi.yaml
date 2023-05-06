@@ -1,0 +1,160 @@
+openapi: "3.0.0"
+info:
+  title: "Test Pablo for Squadmakers API"
+  version: "1.0.0"
+servers:
+  - url: http://localhost:8000
+    description: Main server
+components:
+  schemas:
+    Joke:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 4
+        jokeText:
+          type: string
+          example: A joke
+      required:
+        - id
+        - jokeText
+paths:
+  /joke/{apiName}:
+    get:
+      summary: Returns a random Joke or a Chuck Noris or a Dad Joke if a parameter is passed.
+      parameters:
+        - name: apiName
+          in: path
+          required: false
+          description: The Api Name of the joke API.
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "A joke text"
+        "400":
+          description: A Joke was not found.
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "No Joke Found"
+  /joke:
+    post:
+      summary: Crete a new Joke on the database.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                joke:
+                  type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Joke"
+
+        "400":
+          description: A Joke was not found.
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "No Joke Found"
+    put:
+      summary: Update a Joke on the database.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                joke:
+                  type: string
+                number:
+                  type: integer
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Joke"
+        "400":
+          description: A Joke was not found.
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "No Joke Found"
+    delete:
+      summary: Deletes a Joke from the database.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                number:
+                  type: integer
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Joke Removed"
+        "400":
+          description: A joke was not found.
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "No Joke Found"
+  /math:
+    get:
+      summary: Returns the least common multiple if a list of numbers is passed or return a number plus one if a number is passed.
+      parameters:
+        - name: number
+          in: query
+          required: false
+          description: A number to be added 1.
+          schema:
+            type: integer
+        - name: numbers
+          in: query
+          required: false
+          description: An array of numbers.
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: integer
+                example: 252
+        "400":
+          description: An invalid query parameter numbers or an invalid query parameter number.
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Invalid query parameter number: Not a number"
+        default:
+          description: No query parameter passed.
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "No query parameter passed"
