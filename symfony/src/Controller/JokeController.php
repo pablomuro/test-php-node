@@ -6,23 +6,25 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\HtmlSanitizer\HtmlSanitizerInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use App\Repository\JokeRepository;
 use App\Entity\Joke;
 
-
-/**
- * Pegar dados do corpo, sanetizar dados
- * Validar dados do path e ID, string e numero via validator do Symfony
- * yaml para OpenApi: fazer no node
- */
 class JokeController extends AbstractController
 {
 
   private $apis;
   private $apiHeaders;
 
-  public function __construct(private HttpClientInterface $client, private JokeRepository $jokeRepository ){
+  public function __construct(
+    private HttpClientInterface $client,
+    private JokeRepository $jokeRepository,
+    private ValidatorInterface $validator,
+    private HtmlSanitizerInterface $htmlSanitizer
+  ){
     $this->apis = [
       'Chuck' => 'https://api.chucknorris.io/jokes/random',
       'Dad' => 'https://icanhazdadjoke.com/',
@@ -39,7 +41,7 @@ class JokeController extends AbstractController
   public function index(string $apiName = null): JsonResponse
   {
     $randIndex = array_rand($this->apis,1);
-    $apiName = $apiName ? $apiName : $randIndex;
+    $apiName = $apiName ? $this->htmlSanitizer->sanitize($apiName) : $randIndex;
 
     $apiUrl = $this->apis[$apiName]  ?? null;
 
@@ -61,7 +63,13 @@ class JokeController extends AbstractController
   #[Route('/joke', name: 'app_joke_new', methods: ['POST'])]
   public function create(Request $request): JsonResponse
   {
-    $jokeText = $request->request->get('joke');
+    $jokeText = $this->htmlSanitizer->sanitize($request->request->get('joke'));
+
+    $violations = $this->validator->validate($jokeText, new Assert\NotBlank);
+
+    if (count($violations) > 0) {
+      // TODO - validate request params based on validation rules
+    }
 
     if(!$jokeText) return $this->json('Not Joke Text');
 
@@ -81,6 +89,9 @@ class JokeController extends AbstractController
     if(!$id) return $this->json('Not Found');
     if(!$jokeText) return $this->json('Not Joke Text');
 
+    $id = $this->htmlSanitizer->sanitize($id);
+    $jokeText = $this->htmlSanitizer->sanitize($jokeText);
+
     $joke = $this->jokeRepository->find($id);
     if($joke){
       $joke->setJokeText($jokeText);
@@ -94,7 +105,7 @@ class JokeController extends AbstractController
   #[Route('/joke', name: 'app_joke_delete', methods: ['DELETE'])]
   public function delete(Request $request): JsonResponse
   {
-    $id = $request->request->get('number');
+    $id = $this->htmlSanitizer->sanitize($request->request->get('number'));
 
     if(!$id) return $this->json('Not Found');
 
