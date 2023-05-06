@@ -9,7 +9,6 @@ export const validateId = (id: any): void => {
   try {
     ID_SCHEMA.validateSync(id);
   } catch (error) {
-    console.log(error);
     throw Error(INVALID_ID_MSG);
   }
 };
