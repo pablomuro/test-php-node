@@ -3,7 +3,6 @@ import * as bodyParser from "body-parser";
 import { Request, Response } from "express";
 import { AppDataSource } from "./data-source";
 import { Routes } from "./routes";
-import { Joke } from "./entity/Joke";
 import {
   serve as swaggerServe,
   setup as swaggerSetup,
@@ -11,12 +10,15 @@ import {
 import * as YAML from "yaml";
 import { readFileSync } from "fs";
 import { join } from "path";
+import * as sanitizer from "express-html-sanitizer";
 
 export const expressApp = async () => {
   await AppDataSource.initialize();
   const app = express();
   app.use(bodyParser.json());
   app.use(express.urlencoded({ extended: true, limit: "1mb" }));
+  const sanitizeReqBody = sanitizer();
+  app.use(sanitizeReqBody);
 
   const file = readFileSync(join(__dirname, "../openApi.yaml"), "utf8");
   const swaggerDocument = YAML.parse(file);
@@ -48,13 +50,6 @@ export const expressApp = async () => {
   });
 
   app.listen(8000);
-
-  // const hasJoke = await Joke.findOneBy({ id: 1 });
-  // if (!hasJoke) {
-  //   const joke = new Joke();
-  //   joke.jokeText = "Timber joke";
-  //   await joke.save();
-  // }
 
   console.log(
     "Express server has started on port 3000. Open http://localhost:3000/ to see results"
