@@ -20,7 +20,7 @@ export class MathController {
 
     if (numbers) {
       try {
-        const numbersArray = JSON.parse(numbers);
+        const numbersArray = JSON.parse(numbers as string);
         if (numbersArray && Array.isArray(numbersArray)) {
           return arrayLcm(numbersArray);
         } else {

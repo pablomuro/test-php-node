@@ -57,7 +57,7 @@ class JokeController extends AbstractController
       return $this->json($joke);
     }
     
-    return $this->json('No Joke Found');
+    return $this->json('No Joke Found', 400);
   }
 
   #[Route('/joke', name: 'app_joke_new', methods: ['POST'])]
@@ -71,7 +71,7 @@ class JokeController extends AbstractController
       // TODO - validate request params based on validation rules
     }
 
-    if(!$jokeText) return $this->json('Not Joke Text');
+    if(!$jokeText) return $this->json('Not Joke Text', 400);
 
     $newJoke = new Joke();
     $newJoke->setJokeText($jokeText);
@@ -86,8 +86,8 @@ class JokeController extends AbstractController
     $id = $request->request->get('number');
     $jokeText = $request->request->get('joke');
 
-    if(!$id) return $this->json('Not Found');
-    if(!$jokeText) return $this->json('Not Joke Text');
+    if(!$id) return $this->json('Not Found', 400);
+    if(!$jokeText) return $this->json('Not Joke Text', 400);
 
     $id = $this->htmlSanitizer->sanitize($id);
     $jokeText = $this->htmlSanitizer->sanitize($jokeText);
@@ -99,7 +99,7 @@ class JokeController extends AbstractController
       return $this->json($joke->toJson());
     }
 
-    return $this->json('Not Found');
+    return $this->json('Not Found', 400);
   }
 
   #[Route('/joke', name: 'app_joke_delete', methods: ['DELETE'])]
@@ -107,7 +107,7 @@ class JokeController extends AbstractController
   {
     $id = $this->htmlSanitizer->sanitize($request->request->get('number'));
 
-    if(!$id) return $this->json('Not Found');
+    if(!$id) return $this->json('Not Found', 400);
 
     $joke = $this->jokeRepository->find($id);
     if($joke){
@@ -115,6 +115,6 @@ class JokeController extends AbstractController
       return $this->json('Joke Removed');
     }
 
-    return $this->json('Not Found');
+    return $this->json('Not Found', 400);
   }
 }

@@ -30,8 +30,9 @@ class MathControllerTest extends WebTestCase
         
         $response = $this->client->getResponse();
         $content = json_decode($response->getContent(), true);
-        
-        self::assertTrue($response->isSuccessful());
+
+        self::assertFalse($response->isSuccessful());
+        self::assertEquals($response->getStatusCode(), 400);
         self::assertEquals($content, 'Invalid query parameter number: Not a number');
     }
 
@@ -55,7 +56,8 @@ class MathControllerTest extends WebTestCase
         $response = $this->client->getResponse();
         $content = json_decode($response->getContent(), true);
         
-        self::assertTrue($response->isSuccessful());
+        self::assertFalse($response->isSuccessful());
+        self::assertEquals($response->getStatusCode(), 400);
         self::assertEquals($content, 'Invalid query parameter numbers: Not a list of numbers');
 
         $invalidNumber = '3,9,"a"';
@@ -64,7 +66,8 @@ class MathControllerTest extends WebTestCase
         $response = $this->client->getResponse();
         $content = json_decode($response->getContent(), true);
         
-        self::assertTrue($response->isSuccessful());
+        self::assertFalse($response->isSuccessful());
+        self::assertEquals($response->getStatusCode(), 400);
         self::assertEquals($content, 'Invalid query parameter numbers: Not a list');
     }
 }

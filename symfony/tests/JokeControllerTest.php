@@ -48,7 +48,8 @@ class JokeControllerTest extends WebTestCase
         $response = $this->client->getResponse();
         $content = json_decode($response->getContent(), true);
 
-        self::assertTrue($response->isSuccessful());
+        self::assertFalse($response->isSuccessful());
+        self::assertEquals($response->getStatusCode(), 400);
         self::assertIsString($content);
         self::assertEquals($content, "No Joke Found");
     }
@@ -71,7 +72,8 @@ class JokeControllerTest extends WebTestCase
         $response = $this->client->getResponse();
         $content = json_decode($response->getContent(), true);
 
-        self::assertTrue($response->isSuccessful());
+        self::assertFalse($response->isSuccessful());
+        self::assertEquals($response->getStatusCode(), 400);
         self::assertEquals($content, 'Not Joke Text');
     }
 
@@ -100,7 +102,8 @@ class JokeControllerTest extends WebTestCase
         $response = $this->client->getResponse();
         $content = json_decode($response->getContent(), true);
 
-        self::assertTrue($response->isSuccessful());
+        self::assertFalse($response->isSuccessful());
+        self::assertEquals($response->getStatusCode(), 400);
         self::assertEquals($content, 'Not Found');
 
         $this->client->request('PUT', $this->url, ['number' => -1, 'joke' => 'Edited Test Joke']);
@@ -108,7 +111,8 @@ class JokeControllerTest extends WebTestCase
         $response = $this->client->getResponse();
         $content = json_decode($response->getContent(), true);
 
-        self::assertTrue($response->isSuccessful());
+        self::assertFalse($response->isSuccessful());
+        self::assertEquals($response->getStatusCode(), 400);
         self::assertEquals($content, 'Not Found');
 
         $this->client->request('PUT', $this->url, ['number' => -1, 'joke' => '']);
@@ -116,7 +120,8 @@ class JokeControllerTest extends WebTestCase
         $response = $this->client->getResponse();
         $content = json_decode($response->getContent(), true);
 
-        self::assertTrue($response->isSuccessful());
+        self::assertFalse($response->isSuccessful());
+        self::assertEquals($response->getStatusCode(), 400);
         self::assertEquals($content, 'Not Joke Text');
     }
 
@@ -144,7 +149,8 @@ class JokeControllerTest extends WebTestCase
         $response = $this->client->getResponse();
         $content = json_decode($response->getContent(), true);
 
-        self::assertTrue($response->isSuccessful());
+        self::assertFalse($response->isSuccessful());
+        self::assertEquals($response->getStatusCode(), 400);
         self::assertEquals($content, 'Not Found');
     }
 }

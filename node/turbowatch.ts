@@ -7,7 +7,7 @@ export default defineConfig({
       expression: ["match", "*.ts", "basename"],
       name: "build",
       onChange: async ({ spawn }) => {
-        await spawn`clear;ts-node src/index.ts`;
+        await spawn`clear;ts-node src/app.ts`;
       },
     },
   ],

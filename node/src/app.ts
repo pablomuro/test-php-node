@@ -4,12 +4,24 @@ import { Request, Response } from "express";
 import { AppDataSource } from "./data-source";
 import { Routes } from "./routes";
 import { Joke } from "./entity/Joke";
+import {
+  serve as swaggerServe,
+  setup as swaggerSetup,
+} from "swagger-ui-express";
+import * as YAML from "yaml";
+import { readFileSync } from "fs";
+import { join } from "path";
 
 export const expressApp = async () => {
   await AppDataSource.initialize();
   const app = express();
   app.use(bodyParser.json());
   app.use(express.urlencoded({ extended: true, limit: "1mb" }));
+
+  const file = readFileSync(join(__dirname, "../openApi.yaml"), "utf8");
+  const swaggerDocument = YAML.parse(file);
+
+  app.use("/api-docs", swaggerServe, swaggerSetup(swaggerDocument));
 
   Routes.forEach((route) => {
     (app as any)[route.method](
@@ -27,7 +39,7 @@ export const expressApp = async () => {
                 ? res.json(result)
                 : undefined
             )
-            .catch((error) => res.json(error.message));
+            .catch((error) => res.status(400).json(error.message));
         } else if (result !== null && result !== undefined) {
           res.json(result);
         }
@@ -35,7 +47,7 @@ export const expressApp = async () => {
     );
   });
 
-  app.listen(3000);
+  app.listen(8000);
 
   // const hasJoke = await Joke.findOneBy({ id: 1 });
   // if (!hasJoke) {
