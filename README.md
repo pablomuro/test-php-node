@@ -37,13 +37,13 @@ db.createCollection("joke", {
 
 ## Projects
 
-### Node
+### Node - Express and TypeORM
 
 How to run:
 
 - `$ cd node; npm i`
 - `$ npm run build`
-- `$ node build/app.js`
+- `$ node build/src/index.js`
 
 How to test:
 

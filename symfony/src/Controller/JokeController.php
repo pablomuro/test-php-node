@@ -71,7 +71,7 @@ class JokeController extends AbstractController
       // TODO - validate request params based on validation rules
     }
 
-    if(!$jokeText) return $this->json('Not Joke Text', 400);
+    if(!$jokeText) return $this->json('Invalid Joke Text', 400);
 
     $newJoke = new Joke();
     $newJoke->setJokeText($jokeText);
@@ -87,7 +87,7 @@ class JokeController extends AbstractController
     $jokeText = $request->request->get('joke');
 
     if(!$id) return $this->json('Not Found', 400);
-    if(!$jokeText) return $this->json('Not Joke Text', 400);
+    if(!$jokeText) return $this->json('Invalid Joke Text', 400);
 
     $id = $this->htmlSanitizer->sanitize($id);
     $jokeText = $this->htmlSanitizer->sanitize($jokeText);

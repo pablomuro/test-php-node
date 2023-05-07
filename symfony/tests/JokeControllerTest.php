@@ -74,7 +74,7 @@ class JokeControllerTest extends WebTestCase
 
         self::assertFalse($response->isSuccessful());
         self::assertEquals($response->getStatusCode(), 400);
-        self::assertEquals($content, 'Not Joke Text');
+        self::assertEquals($content, 'Invalid Joke Text');
     }
 
     public function testEditJoke(): void
@@ -122,7 +122,7 @@ class JokeControllerTest extends WebTestCase
 
         self::assertFalse($response->isSuccessful());
         self::assertEquals($response->getStatusCode(), 400);
-        self::assertEquals($content, 'Not Joke Text');
+        self::assertEquals($content, 'Invalid Joke Text');
     }
 
      public function testDeleteJoke(): void

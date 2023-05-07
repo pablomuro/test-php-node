@@ -14,7 +14,7 @@ export class MathController {
       if (Number.isInteger(Number(number))) {
         return Number(number) + 1;
       } else {
-        return INVALID_QUERY_PARAM_NUMBER_MSG;
+        throw Error(INVALID_QUERY_PARAM_NUMBER_MSG);
       }
     }
 
@@ -27,10 +27,10 @@ export class MathController {
           throw null;
         }
       } catch (error) {
-        return INVALID_QUERY_PARAM_LIST_MSG;
+        throw Error(INVALID_QUERY_PARAM_LIST_MSG);
       }
     }
 
-    return NO_QUERY_PARAMS_MSG;
+    throw Error(NO_QUERY_PARAMS_MSG);
   }
 }

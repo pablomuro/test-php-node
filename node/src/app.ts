@@ -11,10 +11,13 @@ import * as YAML from "yaml";
 import { readFileSync } from "fs";
 import { join } from "path";
 import * as sanitizer from "express-html-sanitizer";
+import { DataSource } from "typeorm";
 
-export const expressApp = async () => {
-  await AppDataSource.initialize();
-  const app = express();
+export const app = express();
+
+export const expressAppSetup = async (dataSource: DataSource) => {
+  await dataSource.initialize();
+
   app.use(bodyParser.json());
   app.use(express.urlencoded({ extended: true, limit: "1mb" }));
   const sanitizeReqBody = sanitizer();
@@ -49,12 +52,5 @@ export const expressApp = async () => {
     );
   });
 
-  app.listen(8000);
-
-  console.log(
-    "Express server has started on port 3000. Open http://localhost:3000/ to see results"
-  );
   return app;
 };
-
-expressApp();
